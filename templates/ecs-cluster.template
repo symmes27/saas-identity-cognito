@@ -27,29 +27,29 @@ Parameters:
 Mappings:
   AWSAMIRegionMap:
     AMI:
-      AMZNECSHVM: amzn-ami-2018.03.p-amazon-ecs-optimized
+      AMZNECSHVM: amzn-ami-2018.03.q-amazon-ecs-optimized
     ap-northeast-1:
-      AMZNECSHVM: ami-047281402e27cf0c5
+      AMZNECSHVM: ami-062ef2a2561c9364a
     ap-southeast-1:
-      AMZNECSHVM: ami-04e47a1e7ce1d448a
+      AMZNECSHVM: ami-0b78efd7fafc3f93a
     ap-southeast-2:
-      AMZNECSHVM: ami-0f0ba4af21d1e1766
+      AMZNECSHVM: ami-0c5058003c511da15
     ca-central-1:
-      AMZNECSHVM: ami-0e73429acd3865bd2
+      AMZNECSHVM: ami-0005ff694f167b58a
     eu-central-1:
-      AMZNECSHVM: ami-02c40c6d994943b85
+      AMZNECSHVM: ami-06a20f16dd2f50741
     eu-west-1:
-      AMZNECSHVM: ami-0f85d8192f90863dc
+      AMZNECSHVM: ami-09b156894255325fe
     eu-west-2:
-      AMZNECSHVM: ami-0bf096cb3ddbdffe0
+      AMZNECSHVM: ami-03ca259ae4cb86837
     us-east-1:
-      AMZNECSHVM: ami-0be9e1908fe51a590
+      AMZNECSHVM: ami-0750ab1027b6314c7
     us-east-2:
-      AMZNECSHVM: ami-0351a163d5f20e068
+      AMZNECSHVM: ami-06a8ae0ecd30e804c
     us-west-1:
-      AMZNECSHVM: ami-0860832102c806acb
+      AMZNECSHVM: ami-03fe84be94ca9cc17
     us-west-2:
-      AMZNECSHVM: ami-01a82c3fce2c3ba58
+      AMZNECSHVM: ami-043c4e6bff652b99e
 Resources:
   ECSCluster:
     Type: AWS::ECS::Cluster
