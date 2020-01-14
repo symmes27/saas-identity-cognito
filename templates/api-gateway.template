@@ -30,7 +30,7 @@ Resources:
       Description: Custom Authorizer
       Handler: index.handler
       Role: !Ref LambdaExecutionRole
-      Runtime: nodejs8.10
+      Runtime: nodejs12.x
   IdentityApi:
     Type: AWS::ApiGateway::RestApi
     DependsOn: LambdaAuthorizer
