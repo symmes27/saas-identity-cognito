@@ -6,12 +6,18 @@ Parameters:
   QSS3BucketName:
     Description: The Template Bucket Name.
     Type: String
+  QSS3BucketRegion:
+    Default: 'us-east-1'
+    Description: 'The AWS Region where the Quick Start S3 bucket (QSS3BucketName) is hosted. When using your own bucket, you must specify this value.'
+    Type: String
   QSS3KeyPrefix:
     Description: The Template Bucket Prefix.
     Type: String
   RoleArn:
     Description: The ARN of the role required for copying files.
     Type: String
+Conditions:
+  UsingDefaultBucket: !Equals [!Ref QSS3BucketName, 'aws-quickstart']
 Resources:
   DestinationBucket:
     Type: AWS::S3::Bucket
@@ -24,9 +30,13 @@ Resources:
     DependsOn:
     - DestinationBucket
     Properties:
-      TemplateURL: !Sub https://${QSS3BucketName}.s3.amazonaws.com/${QSS3KeyPrefix}templates/copy-files.template
+      TemplateURL:
+        !Sub
+          - 'https://${S3Bucket}.s3.${S3Region}.${AWS::URLSuffix}/${QSS3KeyPrefix}templates/copy-files.template'
+          - S3Region: !If [UsingDefaultBucket, !Ref 'AWS::Region', !Ref QSS3BucketRegion]
+            S3Bucket: !If [UsingDefaultBucket, !Sub '${QSS3BucketName}-${AWS::Region}', !Ref QSS3BucketName]
       Parameters:
-        TemplateBucket: !Ref QSS3BucketName
+        TemplateBucket: !If [UsingDefaultBucket, !Sub '${QSS3BucketName}-${AWS::Region}', !Ref QSS3BucketName]
         TemplatePrefix: !Ref QSS3KeyPrefix
         DestinationBucket: !Ref DestinationBucket
         RoleArn: !Ref RoleArn
