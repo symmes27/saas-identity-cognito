@@ -271,6 +271,7 @@ Resources:
         ServiceUrl: !GetAtt ALB.Outputs.LoadBalancerUrl
         S3Bucket: !GetAtt ZipFiles.Outputs.AssetBucket
         S3BucketPrefix: !Ref QSS3KeyPrefix
+        TenantTable: !Ref TenantTable
   WaitHandleWebClient:
     Type: AWS::CloudFormation::WaitConditionHandle
   WebClient:
