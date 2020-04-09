@@ -17,6 +17,7 @@ console.log('Loading function');
 var jwt = require('jsonwebtoken');
 var request = require('request');
 var jwkToPem = require('jwk-to-pem');
+var AWS = require('aws-sdk');
 
 var pems;
 
@@ -42,24 +43,26 @@ exports.handler = function(event, context) {
 
         console.log('this is my iss');
         var iss = decodedToken.payload.iss;
-        console.log(iss)
+        console.log(iss);
 
         var n = iss.lastIndexOf('/');
         var result = iss.substring(n + 1);
         console.log(result);
 
 
-        //Obtain Region from User Pool Substring
-        var c1 = iss.lastIndexOf('_');
-        var cresult = iss.substring(c1 - 9);
-        var aws_region = cresult.substring(0, cresult.indexOf('_'));
+        ValidateIssForTenant(event,context)
+        .then(function(data){
+            console.log(data);
 
-        //Now that I have a decodedToken, use the iss for setting my UserPool
-        var userPoolId = result;
-        var region = aws_region; //e.g. us-east-1
+            //Obtain Region from User Pool Substring
+            var c1 = iss.lastIndexOf('_');
+            var cresult = iss.substring(c1 - 9);
+            var aws_region = cresult.substring(0, cresult.indexOf('_'));
 
-        //Download PEM for your UserPool if not already downloaded
-        // if (!pems) {
+            //Now that I have a decodedToken, use the iss for setting my UserPool
+            var userPoolId = result;
+            var region = aws_region; //e.g. us-east-1
+
             //Download the JWKs and save it as PEM
             request({
                 url: iss + '/.well-known/jwks.json',
@@ -85,21 +88,15 @@ exports.handler = function(event, context) {
                     context.fail("error");
                 }
             });
-        // } else {
-        //     //PEMs are already downloaded, continue with validating the token
-        //     ValidateToken(pems, event, context);
-        //
-        // }
 
+        })
+        .catch(function(err){
+          console.log("Iss in token does not match with tenant record.", err.stack);
+        });
     }
     else {
     console.log('Failed to Decode')}
 }
-
-
-
-
-
 
 function decodeToken(event, context) {
 
@@ -117,9 +114,66 @@ function decodeToken(event, context) {
     else {
             return decodedJwt;
     }
-
-
 }
+
+function ValidateIssForTenant(event,context) {
+    console.log("Validating iss from token against tenant db");
+    var promise = new Promise(function(resolve, reject) {
+    var decodedToken = decodeToken(event, context);
+        if (decodedToken){
+            console.log('this is the iss');
+            var iss = decodedToken.payload.iss;
+            var n = iss.lastIndexOf('/');
+            var iss_uip = iss.substring(n + 1);
+            console.log(iss_uip);
+            console.log('this is the tenantid');
+            var tenantid = decodedToken.payload['custom:tenant_id'];
+            console.log(tenantid);
+            GetTenantRecord(tenantid,process.env.TENANT_DB)
+            .then(function(data){
+                console.log("Tenant Record:", data);
+                console.log("Tenant UserPoolId:", data.Item.UserPoolId.S);
+                console.log("Iss UserPoolId:", iss_uip);
+                if(data.Item.UserPoolId.S === iss_uip){
+                    resolve("iss match tenant record.");
+                }else{
+                    reject("iss does not match tenant record");
+                }
+                resolve(data);
+            }).catch(function(err){
+                reject(err);
+            });
+
+        }
+    });
+    return promise;
+}
+
+function GetTenantRecord(tenantid,tablename) {
+    console.log("Obtaining tenant record from " + tablename );
+    var promise = new Promise(function(resolve, reject) {
+    var params = {
+      Key: {
+       "id": {
+         S: tenantid
+        }
+      },
+      TableName: tablename
+     };
+
+     var dynamodb = new AWS.DynamoDB();
+     dynamodb.getItem(params, function(err, data) {
+       if (err) {
+           reject(err);
+        }
+       else{
+           resolve(data);
+       };
+     });
+    });
+   return promise;
+}
+
 
 function ValidateToken(pems, event, context) {
 
@@ -200,9 +254,6 @@ function ValidateToken(pems, event, context) {
             authResponse.context.family_name = decodedJwt.payload['family_name'];
             authResponse.context.role = decodedJwt.payload['custom:role'];
             authResponse.context.UserPoolId = resultUserPoolId;
-
-
-
 
 
             context.succeed(authResponse);

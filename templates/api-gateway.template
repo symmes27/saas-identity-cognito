@@ -20,6 +20,9 @@ Parameters:
   S3BucketPrefix:
     Description: The S3 Bucket Prefix
     Type: String
+  TenantTable:
+    Description: The Table Name for Tenant DB
+    Type: String
 Resources:
   LambdaAuthorizer:
     Type: AWS::Lambda::Function
@@ -31,6 +34,9 @@ Resources:
       Handler: index.handler
       Role: !Ref LambdaExecutionRole
       Runtime: nodejs12.x
+      Environment:
+        Variables:
+          TENANT_DB: !Ref TenantTable
   IdentityApi:
     Type: AWS::ApiGateway::RestApi
     DependsOn: LambdaAuthorizer
