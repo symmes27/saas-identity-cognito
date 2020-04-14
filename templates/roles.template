@@ -5,6 +5,9 @@ Parameters:
   EnvironmentName:
     Description: An environment name that will be prefixed to resource names
     Type: String
+  TenantTableName:
+    Description: The table Name containing tenant information.
+    Type: String
 Resources:
   CleanupRole:
     Type: AWS::IAM::Role
@@ -112,8 +115,19 @@ Resources:
           Statement:
           - Sid: SNS
             Effect: Allow
-            Action: logs:*
-            Resource: arn:aws:logs:*:*:*
+            Action:
+              - logs:*
+            Resource:
+              - arn:aws:logs:*:*:*
+          - Sid: TenantDB
+            Effect: Allow
+            Action:
+              - dynamodb:Get*
+            Resource:
+              - !Sub
+                  - "arn:aws:dynamodb:${AWS::Region}:${AWS::AccountId}:table/${TenantTable}"
+                  - TenantTable: !Ref TenantTableName
+
   CloudFormationExecutionRole:
     Type: AWS::IAM::Role
     Properties:
