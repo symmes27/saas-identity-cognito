@@ -147,12 +147,16 @@ Resources:
                 - cd "${SERVICE_NAME}"
                 - cd src
                 - sudo apt-get update
-                - sudo apt-get install python-software-properties -y
-                - sudo apt-add-repository ppa:brightbox/ruby-ng -y
+                - sudo apt-get install -y python-software-properties
+                - sudo apt-add-repository ppa:brightbox/ruby-ng 
                 - sudo apt-get update
-                - sudo apt-get install ruby2.2 -y
-                - sudo apt-get install ruby2.2-dev -y
-                - sudo apt-get update && sudo apt-get install -y ruby ruby-dev && apt-get clean && sudo gem2.2 install compass
+                - sudo echo "ruby is nice"
+                - sudo apt list -a ruby
+                - sudo apt-get install -V -y ruby2.3 ruby-switch
+                - sudo apt-get install -V -y ruby2.3-dev ruby-switch
+                - sudo apt-get clean
+                - sudo ruby -v
+                - sudo gem install compass
                 - sudo npm install && sudo npm install grunt-cli && sudo npm install bower
                 - ./node_modules/bower/bin/bower install --allow-root
             build:
