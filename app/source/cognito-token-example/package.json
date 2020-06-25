@@ -1,0 +1,20 @@
+{
+  "name": "cognito-token-example",
+  "version": "1.0.0",
+  "description": "Example node microservice that uses JWT token provided by AWS Cognito",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server"
+  },
+  "author": "Qwaltec, Inc.",
+  "contributors": [
+    {
+      "name": "Tyler O'Brien"
+    }
+  ],
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
+}

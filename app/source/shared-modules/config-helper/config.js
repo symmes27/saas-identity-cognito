@@ -59,7 +59,8 @@ module.exports.configure = function(environment) {
                         reg: prod.protocol + process.env.SERVICE_URL + '/reg',
                         auth: prod.protocol + process.env.SERVICE_URL + '/auth',
                         order: prod.protocol + process.env.SERVICE_URL + '/order',
-                        sys: prod.protocol + process.env.SERVICE_URL + '/sys'
+                        sys: prod.protocol + process.env.SERVICE_URL + '/sys',
+                        cognitoTokenExample: prod.protocol + process.env.SERVICE_URL + '/cognitoTokenExample'
                     }
                 }
                 return config;
@@ -91,7 +92,8 @@ module.exports.configure = function(environment) {
                     reg: dev.protocol + dev.domain + ':' + port.reg + '/reg',
                     auth: dev.protocol + dev.domain + ':' + port.auth + '/auth',
                     sys: dev.protocol + dev.domain + ':' + port.sys + '/sys',
-                    order: dev.protocol + dev.domain + ':' + port.order + '/order'
+                    order: dev.protocol + dev.domain + ':' + port.order + '/order',
+                    cognitoTokenExample: dev.protocol + dev.domain + ':' + port.cognitoTokenExample + '/cognitoTokenExample'
                 }
             }
 

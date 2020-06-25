@@ -12,7 +12,8 @@
         "reg": 3004,
         "sys": 3011,
         "product": 3006,
-        "order": 3015
+        "order": 3015,
+        "cognitoTokenExample": 3020
       },
         "role": {
           "sns":""
@@ -24,7 +25,8 @@
         "reg": "Tenant Registration Manager",
         "sys": "System Registration Manager",
         "product": "Product Manager",
-        "order": "Order Manager"
+        "order": "Order Manager",
+        "cognitoTokenExample": "Cognito Token Example"
       },
       "table": {
         "user": "User",
@@ -54,7 +56,8 @@
         "reg": 3004,
         "sys": 3011,
         "product": 3006,
-        "order": 3015
+        "order": 3015,
+        "cognitoTokenExample": 3020
       },
       "name": {
         "auth": "Authentication Manager",
@@ -63,7 +66,8 @@
         "reg": "Tenant Registration Manager",
         "sys": "System Registration Manager",
         "product": "Product Manager",
-        "order": "Order Manager"
+        "order": "Order Manager",
+        "cognitoTokenExample": "Cognito Token Example"
       },
       "table": {
         "user": "User",
